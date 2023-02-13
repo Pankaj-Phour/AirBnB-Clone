@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './landing/home/home.component';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { NgOtpInputModule } from 'ng-otp-input';
 
 @NgModule({
@@ -20,7 +21,8 @@ import { NgOtpInputModule } from 'ng-otp-input';
     MatCheckboxModule,
     FormsModule,
     ReactiveFormsModule,
-    NgOtpInputModule
+    NgOtpInputModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
