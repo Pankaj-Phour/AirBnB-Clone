@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -19,7 +20,7 @@ export class HomeComponent implements OnInit {
   differentPassword:boolean = false;
   numberSubmit:boolean = false;
   invalidOtp:boolean = true;
-  constructor(private fb:FormBuilder) { }
+  constructor(private fb:FormBuilder,private _as:AuthService) { }
 
   ngOnInit(): void {
     this.signupForm = this.fb.group({
@@ -52,6 +53,16 @@ export class HomeComponent implements OnInit {
   Submit(){
     console.log("Submitted");
     this.signIn ? this.numberSubmit = true : this.numberSubmit = false;
+
+    if(this.signIn){
+      const params = {
+        number:this.signinForm.value.contact
+      }
+      this._as.signIn('signin',params).subscribe((next:any)=>{
+        console.log(next);
+        
+      })
+    }
     this.signinForm.reset();
     this.signinForm.reset();
   }
@@ -113,10 +124,21 @@ export class HomeComponent implements OnInit {
     if(e.length>3){
       this.invalidOtp = false;
       console.log("OTP submitted successfully");
-      setTimeout(() => {
-        this.Signin()
-        this.numberSubmit = false;
-      }, 2000);
+      const params = {
+        otp:e
+      }
+      this._as.otpChecker('otp',params).subscribe((next:any)=>{
+        console.log(next);
+        if(next.error){
+          console.log("Invalid otp");
+        }
+        else{
+          setTimeout(() => {
+            this.Signin()
+            this.numberSubmit = false;
+          }, 1000);
+        }
+      })
     }
     else{
       this.invalidOtp = true;
